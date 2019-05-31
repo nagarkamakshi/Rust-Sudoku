@@ -83,7 +83,8 @@ impl SudokuboardView {
     )
         where C: CharacterCache<Texture = G::Texture>
     {
-        use graphics::{Image, Line, Rectangle, Transformed};
+        use graphics::{Line, Rectangle, Transformed};
+        use graphics::text::Text;
 
         let ref settings = self.settings;
         let board_rect = [
@@ -108,25 +109,23 @@ impl SudokuboardView {
         }
 
         // Draw characters.
-        let text_image = Image::new_color(settings.text_color);
+        let text = Text::new_color(settings.text_color, 34);
         let cell_size = settings.size / 9.0;
         for j in 0..9 {
             for i in 0..9 {
                 if let Some(ch) = controller.sudokuboard.char([i, j]) {
-                    let pos = [
-                        settings.position[0] + i as f64 * cell_size + 15.0,
-                        settings.position[1] + j as f64 * cell_size + 34.0
-                    ];
-                   //println!("character {:?}", ch);
-                    if let Ok(character) = glyphs.character(34, ch) {
-                        let ch_x = pos[0] + character.left();
-                        let ch_y = pos[1] - character.top();
-                        //println!("draw state {:?}",&c.draw_state );
-                        text_image.draw(character.texture,
-                                        &c.draw_state,
-                                        c.transform.trans(ch_x, ch_y),
-                                        g);
-                    }
+                    let ch_x = settings.position[0] +
+                        i as f64 * cell_size + 15.0;
+                    let ch_y = settings.position[1] +
+                        j as f64 * cell_size + 34.0;
+                    let chs = ch.to_string();
+                    text.draw(
+                        &chs,
+                        glyphs,
+                        &c.draw_state,
+                        c.transform.trans(ch_x, ch_y),
+                        g,
+                    ).unwrap_or_else(|_| panic!("text draw failed"));
                 }
             }
         }
