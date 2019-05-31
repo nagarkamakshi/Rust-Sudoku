@@ -30,6 +30,7 @@ impl SudokuboardController {
     }
 
     /// Handles events.
+
     pub fn event<E: GenericEvent>(&mut self, pos: [f64; 2], size: f64, e: &E) {
         use piston::input::{Button, Key, MouseButton};
 
@@ -60,7 +61,7 @@ impl SudokuboardController {
                     Key::D6 => self.sudokuboard.set(ind, 6),
                     Key::D7 => self.sudokuboard.set(ind, 7),
                     Key::D8 => self.sudokuboard.set(ind, 8),
-                    Key::D9 => self.gameboard.set(ind, 9),
+                    Key::D9 => self.sudokuboard.set(ind, 9),
                     _ => {}
                 }
             }

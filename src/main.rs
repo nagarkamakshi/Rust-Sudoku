@@ -13,7 +13,7 @@ use piston::input::RenderEvent;
 use glutin_window::GlutinWindow;
 use opengl_graphics::{OpenGL, Filter, GlGraphics, GlyphCache, TextureSettings};
 
-pub use board::Matrix9;
+pub use sudokuboard::Matrix9;
 pub use sudokuboard_controller::SudokuboardController;
 pub use sudokuboard_view::{SudokuboardView, SudokuboardViewSettings};
 
@@ -32,8 +32,8 @@ fn main() {
     let mut events = Events::new(EventSettings::new().lazy(true));
     let mut gl = GlGraphics::new(opengl);
 
-    let sudokuboard = Matrix9::new();
-    let mut sudokuboard_controller = SudokuboardController::new(sudokuboard.fillvalues());
+    let mut sudokuboard = Matrix9::new();
+    let mut sudokuboard_controller = SudokuboardController::new(sudokuboard);
     let sudokuboard_view_settings = SudokuboardViewSettings::new();
     let sudokuboard_view = SudokuboardView::new(sudokuboard_view_settings);
 
@@ -48,7 +48,6 @@ fn main() {
         if let Some(args) = e.render_args() {
             gl.draw(args.viewport(), |c, g| {
                 use graphics::{clear};
-
                 clear([1.0; 4], g);
                 sudokuboard_view.draw(&sudokuboard_controller, glyphs, &c, g);
             });

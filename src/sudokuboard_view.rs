@@ -12,7 +12,7 @@ use graphics::{Context, Graphics};
 use crate::SudokuboardController;
 
 /// Stores sudokuboard view settings.
-pub struct SusokuboardViewSettings {
+pub struct SudokuboardViewSettings {
     /// Position from left-top corner.
     pub position: [f64; 2],
     /// Size of sudokuboard along horizontal and vertical edge.
@@ -42,7 +42,7 @@ pub struct SusokuboardViewSettings {
 impl SudokuboardViewSettings {
     /// Creates new sudokuboard view settings.
     pub fn new() -> SudokuboardViewSettings {
-        sudokuboardViewSettings {
+        SudokuboardViewSettings {
             position: [10.0; 2],
             size: 400.0,
             background_color: [0.8, 0.8, 1.0, 1.0],
@@ -76,7 +76,7 @@ impl SudokuboardView {
     /// Draw sudokuboard.
     pub fn draw<G: Graphics, C>(
         &self,
-        controller: &sudokuboardController,
+        controller: &SudokuboardController,
         glyphs: &mut C,
         c: &Context,
         g: &mut G
@@ -117,9 +117,11 @@ impl SudokuboardView {
                         settings.position[0] + i as f64 * cell_size + 15.0,
                         settings.position[1] + j as f64 * cell_size + 34.0
                     ];
+                   //println!("character {:?}", ch);
                     if let Ok(character) = glyphs.character(34, ch) {
                         let ch_x = pos[0] + character.left();
                         let ch_y = pos[1] - character.top();
+                        //println!("draw state {:?}",&c.draw_state );
                         text_image.draw(character.texture,
                                         &c.draw_state,
                                         c.transform.trans(ch_x, ch_y),
