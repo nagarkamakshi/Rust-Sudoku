@@ -7,7 +7,6 @@ edition = "2018"
 [dependencies]
 rand = "0.6"
 clap = "2.33.0"
-ncurses = "5.99.0"
 piston = "0.43.0"
 piston2d-opengl_graphics = "0.62.0"
 piston2d-graphics = "*"
