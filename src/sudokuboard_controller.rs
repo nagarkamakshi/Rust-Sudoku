@@ -53,7 +53,7 @@ impl SudokuboardController {
             if let Some(ind) = self.selected_cell {
                 // Set cell value.
                 match key {
-                    Key::D1 => self.sudokuboard.set(ind, 1),
+                    Key::D1 => self.sudokuboard.set(ind, 1) ,
                     Key::D2 => self.sudokuboard.set(ind, 2),
                     Key::D3 => self.sudokuboard.set(ind, 3),
                     Key::D4 => self.sudokuboard.set(ind, 4),
@@ -62,6 +62,9 @@ impl SudokuboardController {
                     Key::D7 => self.sudokuboard.set(ind, 7),
                     Key::D8 => self.sudokuboard.set(ind, 8),
                     Key::D9 => self.sudokuboard.set(ind, 9),
+                    Key::S => self.sudokuboard.print_solution(),
+                    Key::N => self.sudokuboard.generate(),
+                    Key::B => self.sudokuboard.backspace(ind),
                     _ => {}
                 }
             }

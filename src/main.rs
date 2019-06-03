@@ -33,7 +33,7 @@ fn main() {
     let mut gl = GlGraphics::new(opengl);
 
     let mut sudokuboard = Matrix9::new();
-    let mut sudokuboard_controller = SudokuboardController::new(sudokuboard);
+    let mut sudokuboard_controller = SudokuboardController::new(sudokuboard.remove_random());
     let sudokuboard_view_settings = SudokuboardViewSettings::new();
     let sudokuboard_view = SudokuboardView::new(sudokuboard_view_settings);
 
@@ -53,4 +53,22 @@ fn main() {
             });
         }
     }
+}
+#[test]
+fn test_check_safe() {
+    let mut test: Matrix9 = Matrix9 { data: [[0; 9]; 9] };
+    test.fillvalues();
+    let mut cell = (0, 0);
+    assert_eq!(test.check_safe(cell.0, cell.1, 10), false);
+    cell = (6, 7);
+    assert_eq!(test.check_safe(cell.0, cell.1, 10), false);
+}
+#[test]
+fn test_MorethanOne_Solution() {
+    let mut test: Matrix9 = Matrix9 { data: [[0; 9]; 9] };
+    test.fillvalues();
+    let mut x = test.shuffle();
+    x.remove_random();
+    x.solver();
+    assert_ne!(test.shuffle(), x);
 }

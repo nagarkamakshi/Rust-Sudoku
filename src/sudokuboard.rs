@@ -1,12 +1,13 @@
-
+//! # Sudoku Game
+//!
+//! A 9*9 Sudoku Puzzle
 use rand::prelude::*; ///for generating random numbers
-//use ncurses::*;
-
-#[derive(Debug, Clone, Copy)]
+static mut PUZZLE : [[u8; 9]; 9]  = [[0; 9]; 9];
+#[derive(Debug, Clone, Copy,PartialEq)]
 /// A 9*9 grid for Sudoku is represented here.
 ///
-///
 pub struct Matrix9 {
+    /// Stires sudokuboard data
     pub data: [[u8; 9]; 9],
 }
 impl Matrix9{
@@ -22,7 +23,7 @@ impl Matrix9{
     /// returns a matrix filled with 0's in it.
     /// ```
     pub fn new()->Self{
-        Self{data: [[0;9];9]}
+        Self{data:[[0;9];9]}
     }
     /// Gets the character at cell location.
     pub fn char(&self, ind: [usize; 2]) -> Option<char> {
@@ -41,10 +42,20 @@ impl Matrix9{
         }
     /// Set cell value.
     pub fn set(&mut self, ind: [usize; 2], val: u8) {
-            println!("index {:?}", ind);
-            println!("data {:?}",self.data);
+            //println!("index {:?}", ind);
+            /*for i in self.data.iter(){
+                println!("{:?}",i);
+            } */
+        if self.check_safe(ind[1],ind[0],val) {
             self.data[ind[1]][ind[0]] = val;
+        }
+        else{
+            println!("this number is not valid");
+        }
     }
+    /// fill the grid with non-conflicting numbers
+    /// to generate a valid sudoku
+    /// https://stackoverflow.com/questions/4066075/proper-data-structure-to-represent-a-sudoku-puzzle
     pub fn fillvalues(&mut self)->Self{
         let v = [1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9];
         for b in (0..).step_by(3).take(3){
@@ -56,9 +67,51 @@ impl Matrix9{
         }
         Self{data:self.data}
     }
+    ///Another approach the fill the grid
+    ///It fills the diagonal boxes Randomly
+    /// then backtracking can be using to fill the rest
+    fn fill_diagonal_values(&mut self) -> Self {
+        let mut rng = thread_rng();
+        let numbers: Vec<_> = (1..10).collect();
+        let mut v: Vec<u8> = Vec::new();
+        let mut v2: Vec<u8> = Vec::new();
+        let mut v3: Vec<u8> = Vec::new();
+        let mut number = numbers.choose(&mut rng).unwrap();
+        for i in 0..3 {
+            for j in 0..3 {
+                while v.iter().any(|c| c == number) {
+                    number = numbers.choose(&mut rng).unwrap();
+                }
+                self.data[i][j] = *number;
+                v.push(*number);
+            }
+        }
+        for i in 3..6 {
+            for j in 3..6 {
+                while v2.iter().any(|c| c == number) {
+                    number = numbers.choose(&mut rng).unwrap();
+                }
+                self.data[i][j] = *number;
+                v2.push(*number);
+            }
+        }
+        for i in 6..9 {
+            for j in 6..9 {
+                while v3.iter().any(|c| c == number) {
+                    number = numbers.choose(&mut rng).unwrap();
+                }
+                self.data[i][j] = *number;
+                v3.push(*number);
+            }
+        }
+
+        Self { data: self.data }
+    }
+    ///once grid is full with valid numbers
+    ///shuffle them Randomly to get a unique sudoku
     pub fn shuffle(&mut self) -> Self{
+        for _ in 0..500{
         let v = &mut Matrix9::random_shuffle();
-        //println!("array is {:?}",v );
         let first = v[1] as usize +v[2] as usize;
         let second = v[1] as usize +v[3] as usize;
         //swaping  the rows
@@ -77,11 +130,11 @@ impl Matrix9{
             self.data[row][second]=temp;
             }
         }
-        /*for row in 0..2{
-                self.data.swap(row,row+1);
-        } */
+        }
         Self{data:self.data}
     }
+    ///helper function for shuffle()
+    ///Randomly pick if row,column or values in boxes need to shuffle
     pub fn random_shuffle()-> [u8;4] {
         let mut rng = thread_rng();
         //Randomly pick if row,column or values in boxes need to shuffle
@@ -95,31 +148,27 @@ impl Matrix9{
         let v = [*row_or_col,*box_num,*choice1,*choice2];
         v
     }
+    ///once the grid is shuffled remove some numbers
+    ///in order to get Sudoku ready to play
     pub fn remove_random(&mut self) ->Self{
+        self.fillvalues();
+        self.shuffle();
         let numbers:Vec<_> = (0..9).collect();
-        //let mut ok_cells:Vec<_> = vec![];
-        //println!("numbers= {:?}",numbers );
         let mut rng = thread_rng();
         for _ in 0..59{
             //Randomly pick if row,column or values in boxes need to shuffle
             let row  = numbers.choose(&mut rng).unwrap();
             let col =  numbers.choose(&mut rng).unwrap();
-            //let temp = self.data[*row][*col];
             self.data[*row][*col]= 0;
-            /*if !self.solver(){
-                println!("this removal is not ok" );
-                //self.data[*row][*col]= temp;
-            }
-            else{
-                ok_cells.push((*row,*col));
-                println!("cells are ok to remove {:?}",ok_cells);
-            } */
         }
-        //for i in ok_cells.iter(){
-
-        //}
+        // Safety: There will always be some value in the PUZZLE
+        unsafe{
+            PUZZLE = self.data;
+        }
         Self{data:self.data}
     }
+    ///helper function for solver()
+    ///returns true if a number is valid for a given cell
     pub fn check_safe(&self,row:usize,col:usize,num:u8)->bool{
         if self.check_rows(row,num)
             && self.check_cols(col,num)
@@ -130,18 +179,24 @@ impl Matrix9{
         }
         false
     }
+    /// helper function for check_safe()
+    /// returns true if number is valid for the given row
     pub fn check_rows(&self,row:usize,num: u8) -> bool {
         for col in 0..9 {
             if self.data[row][col] == num { return false; }
         }
         true
     }
+    /// helper function for check_safe()
+    /// returns true if number is valid for the given column
     pub fn check_cols(&self,col:usize,num: u8) -> bool {
         for row in 0..9 {
             if self.data[row][col] == num { return false; }
         }
         true
     }
+    /// helper function for check_safe()
+    /// returns true if number is valid for the given square (3*3)
     pub fn check_box(&self,brow:usize,bcol:usize,num: u8) -> bool {
         for row in 0..3{
             for col in 0..3{
@@ -150,6 +205,8 @@ impl Matrix9{
         }
         true
     }
+    /// helper function for solver()
+    /// returns (row,col) of the empty cell
     pub fn find_empty(&self)->(usize,usize){
         for i in 0..9{
             for j in 0..9{
@@ -158,6 +215,8 @@ impl Matrix9{
         }
         (9,9)
     }
+    /// solves the sudoku using backtracking
+    /// returns true if there is solution for a given sudoku
     pub fn solver(&mut self) -> bool{
         let x = self.find_empty();
         if x==(9,9) {
@@ -176,5 +235,27 @@ impl Matrix9{
                 }
             return false;
         }
-
+    /// prints the solution of the sudoku
+    pub fn print_solution(&mut self){
+        if !self.solver(){
+            println!("some entries prevent backtracking" );
+        }
+    }
+    /// Generate a new sudoku
+    pub fn generate(&mut self){
+        self.fillvalues();
+        self.shuffle();
+        self.remove_random();
+    }
+    /// Set the cell data to 0
+    pub fn backspace(&mut self, ind: [usize; 2]){
+            unsafe{
+                if PUZZLE[ind[1]][ind[0]]==0{
+                self.data[ind[1]][ind[0]] = 0;
+            }
+            else{
+                println!("cant remove fixed cell" );
+            }
+        }
+    }
 }
