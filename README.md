@@ -31,10 +31,10 @@ To Play:
 
 cargo run
 
-use the mouse curser to point to the cell, fill the numbers using digit keys(1-9).
-B - BackSpace
-N - New Game
-S - Solve the puzzle
+1. use the mouse curser to point to the cell, fill the numbers using digit keys(1-9).
+2. B - BackSpace
+3. N - New Game
+4. S - Solve the puzzle
 
 
 # Current Status:
