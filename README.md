@@ -36,17 +36,17 @@ cargo run
 3. N - New Game
 4. S - Solve the puzzle
 
-# Preview:
+# Preview
 
-![alt text](https://https://github.com/nagarkamakshi/Rust-Sudoku/assets/Sudoku.png)
+![alt text](https://github.com/nagarkamakshi/Rust-Sudoku/tree/master/assets/Sudoku.png)
 
-# Current Status:
+# Current Status
 
 Game has restriction that it doesnt let you fill numbers that are confilt any row, column or box.
 
 If the numbers prevents the backtracking the solver doent work.
 
-# Future Goal:
+# Future Goal
 
 1. Change the color of the conflicting cells.
 2. Include Timer for scoring purpose.
