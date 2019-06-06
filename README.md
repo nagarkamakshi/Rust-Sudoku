@@ -38,9 +38,9 @@ cargo run
 
 # Preview
 
-![Alt text](https://github.com/nagarkamakshi/Rust-Sudoku/master/assets/Sudoku.png)
+![Alt text](https://github.com/nagarkamakshi/Rust-Sudoku/assets/Sudoku.png)
 
-[[https://github.com/nagarkamakshi/Rust-Sudoku/tree/master/assets/Sudoku.png|alt=octocat]]
+[[https://github.com/nagarkamakshi/Rust-Sudoku/assets/Sudoku.png|alt=octocat]]
 
 # Current Status
 
