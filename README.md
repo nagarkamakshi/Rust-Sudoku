@@ -38,6 +38,7 @@ cargo run
 
 # Preview:
 
+![alt text](https://https://github.com/nagarkamakshi/Rust-Sudoku/assets/Sudoku.png)
 
 # Current Status:
 
