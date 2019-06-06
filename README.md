@@ -36,6 +36,8 @@ cargo run
 3. N - New Game
 4. S - Solve the puzzle
 
+# Preview:
+
 
 # Current Status:
 
@@ -45,7 +47,7 @@ If the numbers prevents the backtracking the solver doent work.
 
 # Future Goal:
 
-1. Change the color of the confiling cells.
+1. Change the color of the conflicting cells.
 2. Include Timer for scoring purpose.
 3. difficuly level for generating puzzles.
 
