@@ -38,9 +38,8 @@ cargo run
 
 # Preview
 
-![Image of Sudoku](https://github.com/nagarkamakshi/Rust-Sudoku/assets/Sudoku.png)
+![alt-text](https://github.com/nagarkamakshi/Rust-Sudoku/Sudoku.png)\
 
-[[https://github.com/nagarkamakshi/Rust-Sudoku/assets/Sudoku.png|alt=octocat]]
 
 # Current Status
 
