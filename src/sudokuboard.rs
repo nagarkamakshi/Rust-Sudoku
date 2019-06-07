@@ -42,10 +42,6 @@ impl Matrix9{
         }
     /// Set cell value.
     pub fn set(&mut self, ind: [usize; 2], val: u8) {
-            //println!("index {:?}", ind);
-            /*for i in self.data.iter(){
-                println!("{:?}",i);
-            } */
         if self.check_safe(ind[1],ind[0],val) {
             self.data[ind[1]][ind[0]] = val;
         }
@@ -70,7 +66,7 @@ impl Matrix9{
     ///Another approach the fill the grid
     ///It fills the diagonal boxes Randomly
     /// then backtracking can be using to fill the rest
-    fn fill_diagonal_values(&mut self) -> Self {
+    pub fn _fill_diagonal_values(&mut self) -> Self {
         let mut rng = thread_rng();
         let numbers: Vec<_> = (1..10).collect();
         let mut v: Vec<u8> = Vec::new();
