@@ -38,7 +38,6 @@ cargo run
 
 # Preview
 
-![alt-text](https://github.com/nagarkamakshi/Rust-Sudoku/Sudoku.png)
 ![alt-text](https://github.com/nagarkamakshi/Rust-Sudoku/blob/master/Sudoku.png)
 
 
